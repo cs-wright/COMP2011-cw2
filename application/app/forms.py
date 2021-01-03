@@ -1,0 +1,12 @@
+from flask_wtf import Form
+from wtforms import TextField, DateField, SelectField, PasswordField
+from wtforms.validators import DataRequired
+from datetime import datetime
+
+class RegisterUser(Form):
+    name = TextField('name', validators=[DataRequired()])
+    username = TextField('username', validators=[DataRequired()])
+    password = PasswordField('password', validators=[DataRequired()])
+    correctFormat ='%d/%m/%Y'
+    dob = DateField('dob', format=correctFormat, validators=[DataRequired()])
+    gender = SelectField('Programming Language', choices=['Male', 'Female', 'Other', 'Prefer not to say'], validators=[DataRequired()])
