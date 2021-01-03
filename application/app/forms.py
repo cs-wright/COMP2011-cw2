@@ -9,4 +9,8 @@ class RegisterUser(Form):
     password = PasswordField('password', validators=[DataRequired()])
     correctFormat ='%d/%m/%Y'
     dob = DateField('dob', format=correctFormat, validators=[DataRequired()])
-    gender = SelectField('Programming Language', choices=['Male', 'Female', 'Other', 'Prefer not to say'], validators=[DataRequired()])
+    gender = SelectField('gender', choices=['Male', 'Female', 'Other', 'Prefer not to say'], validators=[DataRequired()])
+
+class LoginUser(Form):
+    username = TextField('username', validators=[DataRequired()])
+    password = PasswordField('password', validators=[DataRequired()])
