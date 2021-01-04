@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import TextField, DateField, SelectField, PasswordField
+from wtforms import TextField, DateField, SelectField, PasswordField, TextAreaField
 from wtforms.validators import DataRequired
 from datetime import datetime
 
@@ -14,3 +14,6 @@ class RegisterUser(Form):
 class LoginUser(Form):
     username = TextField('username', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
+
+class WritePost(Form):
+    txt = TextAreaField('Whats on your mind?', validators=[DataRequired()])

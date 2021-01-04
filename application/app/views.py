@@ -1,8 +1,8 @@
 from flask import render_template, flash, redirect, url_for
 from app import app, db, models
 from flask_login import current_user, login_user, logout_user, login_required
-from .forms import RegisterUser, LoginUser
-from app.models import User
+from .forms import RegisterUser, LoginUser, WritePost
+from app.models import User, Post
 
 @app.route('/auth', methods=['GET', 'POST'])
 def authenticate():
@@ -73,7 +73,13 @@ def logout():
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-	home={'description':'Welcome to this application. Please select one of the three available options from the navigation bar.'}
-	return render_template('index.html',
-						   title="Home",home=home)
+    form = WritePost()
+    home={'description':'Welcome to this application. Please select one of the three available options from the navigation bar.'}
+    if form.validate_on_submit():
+        flash('posted!')
+        new = Post(content=form.txt.data, author=current_user)
+        db.session.add(new)
+        db.session.commit()
+    return render_template('index.html', title="Home", home=home, form=form)
+
 
