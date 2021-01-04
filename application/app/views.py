@@ -21,7 +21,7 @@ def register():
     login_form = LoginUser()
 
     if register_form.validate_on_submit():
-        flash('Succesfully received form data. %s, %s, %s, %s, %s'%(register_form.name.data, register_form.username.data, register_form.password.data, register_form.dob.data, register_form.gender.data))
+        #flash('Succesfully received form data. %s, %s, %s, %s, %s'%(register_form.name.data, register_form.username.data, register_form.password.data, register_form.dob.data, register_form.gender.data))
         user = User.query.filter_by(username=register_form.username.data).first()
         if user is not None:
             flash('This username is already in use!')
@@ -48,9 +48,8 @@ def login():
     login_form = LoginUser()
 
     if login_form.validate_on_submit():
-        flash('Succesfully received form data. %s, %s'%(login_form.username.data, login_form.password.data))
+        #flash('Succesfully received form data. %s, %s'%(login_form.username.data, login_form.password.data))
         user = User.query.filter_by(username=login_form.username.data).first()
-        
         if user is None:
             flash('Invalid username!')
         elif user.validatePassword(login_form.password.data) == False:
