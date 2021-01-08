@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Account Management</h1>
+<form method="post" name="register">
+   {{ form.hidden_tag() }}
+   <div class="panel panel-default">
+       <div class="panel-body">
+           <p><b>Name</b></p>
+           {{ form.name(class_='form-control') }}
+       </div>
+       <div class="panel-body">
+           <p>Username</p>
+           {{ form.username(class_='form-control') }}
+       </div>
+       <div class="panel-body">
+           <p><b>Date of birth</b></p>
+           {{ form.dob(class_='form-control') }}
+           {% for error in form.dob.errors %}
+           <div class="alert alert-danger" role="alert">
+               [{{ error }}]
+             </div>
+             {% endfor %}
+       </div>
+       <div class="panel-body">
+           <p><b>gender</b></p>
+           {{ form.gender(class_='form-control') }}
+       </div>
+   </div>
+   <button type="submit" class="btn btn-primary" value="register">Update!</button>         
+</form>
+
+<form method="post" name="pass">
+    {{ passwordForm.hidden_tag() }}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <p><b>Current Password</b></p>
+            {{ passwordForm.current_password(class_='form-control') }}
+        </div>
+        <div class="panel-body">
+            <p>New Password</p>
+            {{ passwordForm.new_password(class_='form-control') }}
+        </div>
+        <div class="panel-body">
+            <p><b>Confirm Password</b></p>
+            {{ passwordForm.confirm_password(class_='form-control') }}
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary" value="pass">Change Password!</button>         
+ </form>
+
+
+{% endblock %}

@@ -17,3 +17,8 @@ class LoginUser(Form):
 
 class WritePost(Form):
     txt = TextAreaField('txt', validators=[DataRequired()])
+
+class UpdatePassword(Form):
+    current_password = PasswordField('current_password', validators=[DataRequired()])
+    new_password = PasswordField('new_password', validators=[DataRequired()])
+    confirm_password = PasswordField('confirm_password', validators=[DataRequired()])

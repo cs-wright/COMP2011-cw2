@@ -28,6 +28,7 @@ class User(UserMixin, db.Model):
 
     def setPassword(self, plain_password):
         self.password = generate_password_hash(plain_password)
+        db.session.commit()
     
     def validatePassword(self, guess):
         return check_password_hash(self.password, guess)

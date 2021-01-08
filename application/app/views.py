@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for
 from app import app, db, models, admin
 from flask_login import current_user, login_user, logout_user, login_required
-from .forms import RegisterUser, LoginUser, WritePost
+from .forms import RegisterUser, LoginUser, WritePost, UpdatePassword
 from app.models import User, Post, friendship
 from flask_admin.contrib.sqla import ModelView 
 from datetime import datetime
@@ -69,6 +69,59 @@ def login():
                             register_form=register_form, 
                             login_form=login_form)
 
+
+@app.route('/manageaccount', methods=['GET','POST'])
+@login_required
+def accountManagement():
+    form = RegisterUser()
+    passwordForm = UpdatePassword()
+    if form.name.data is None:
+        form.name.data = current_user.name
+
+    if form.username.data is None:
+        form.username.data = current_user.username
+
+    if form.dob.data is None:
+        form.dob.data = current_user.dob
+    form.password.data = current_user.password
+    if form.gender.data is None:
+        form.gender.data = current_user.gender
+
+    if form.validate_on_submit():
+        current_user.name = form.name.data
+
+        count=0
+        if current_user.username != form.username.data:
+            for user in User.query.all():
+                if user.username == form.username.data:
+                    count+=1
+            if count > 0:
+                #Username is already taken
+                form.username.data = current_user.username
+                flash('This Username is taken!')
+            else:
+                #username is available
+                current_user.username = form.username.data
+
+        current_user.dob = form.dob.data
+        current_user.gender = form.gender.data
+        flash('Account updated!')
+        db.session.commit()
+    
+    if passwordForm.validate_on_submit():
+        if current_user.validatePassword(passwordForm.current_password.data):
+            if passwordForm.new_password.data == passwordForm.confirm_password.data:
+                current_user.setPassword(passwordForm.new_password.data)
+                flash('Password Updated!')
+            else:
+                flash('Passwords did not match!')
+        else:
+            flash('Wrong Password!')
+
+    return render_template('accountmanagement.html',
+                           title='Manage Account',
+                           form=form, 
+                           passwordForm=passwordForm)
 
 
 @app.route('/logout')
@@ -143,7 +196,7 @@ def following():
 
 @app.route('/unfollow/<id>', methods=['GET'])
 @login_required
-def unfollower(id):
+def unfollow(id):
     following = User.query.get(id)
     current_user.unfollow(following)
     flash('Unfollowed!')
@@ -162,11 +215,33 @@ def followers():
 @app.route('/rmfollower/<id>', methods=['GET'])
 @login_required
 def remove_follower(id):
-
-    
-
     follower = User.query.get(id)
     flash('User: %s, has unfollowed you  (%s)'%(follower.name, current_user.name))
     follower.unfollow(current_user)
     #flash('Follower Removed!')
     return redirect('/followers')
+
+
+@app.route('/follow/<id>', methods=['GET'])
+@login_required
+def follow(id):
+    toFollow = User.query.get(id)
+    flash('You are now following %s'%(toFollow.name))
+    current_user.follow(toFollow)
+    return redirect('/findfollowers')
+
+
+@app.route('/findfollowers', methods=['GET', 'POST'])
+@login_required
+def findUsersToFollower():
+    following = current_user.friends
+    notFollowing = []
+    current=0
+    for user in User.query.all():
+        for friends in current_user.friends:
+            if user.id == friends.id:
+                current=1
+        if current==0:
+            notFollowing.append(user)
+        current=0
+    return render_template('findusers.html', title="Find Users", users=notFollowing)
