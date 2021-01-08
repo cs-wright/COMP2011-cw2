@@ -4,6 +4,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from .forms import RegisterUser, LoginUser, WritePost
 from app.models import User, Post, friendship
 from flask_admin.contrib.sqla import ModelView 
+from datetime import datetime
 
 from sqlalchemy.orm import aliased
 
@@ -90,11 +91,35 @@ def home():
     return render_template('index.html', title="Home", home=home, form=form)
 
 
+@app.route('/followingposts', methods=['GET', 'POST'])
+@login_required
+def followingposts():
+    posts = Post.query.join(friendship, (friendship.c.friend_id == Post.author_id)).filter(friendship.c.user_id == current_user.id).order_by(Post.date.desc())
+    return render_template('followingposts.html', title="Following users Posts", posts=posts)
+
 @app.route('/myposts', methods=['GET', 'POST'])
 @login_required
 def myposts():
     posts = Post.query.filter_by(author_id=current_user.id)
     return render_template('myposts.html', title="My Posts", posts=posts)
+
+
+@app.route('/edit_post/<id>', methods=['GET','POST'])
+@login_required
+def edit_post(id):
+    post = Post.query.get(id)
+    form = WritePost()
+    if form.txt.data is None:
+        form.txt.data = post.content
+    if form.validate_on_submit():
+        post.content = form.txt.data
+        #post.date = datetime.utcnow
+        db.session.commit()
+        return redirect('/myposts')
+
+    return render_template('edit_post.html',
+                           title='Edit Post',
+                           form=form)
 
 
 @app.route('/delete_post/<id>', methods=['GET'])

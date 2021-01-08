@@ -16,4 +16,4 @@ class LoginUser(Form):
     password = PasswordField('password', validators=[DataRequired()])
 
 class WritePost(Form):
-    txt = TextAreaField('Whats on your mind?', validators=[DataRequired()])
+    txt = TextAreaField('txt', validators=[DataRequired()])

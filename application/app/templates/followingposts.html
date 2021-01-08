@@ -1,14 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Your Posts</h1>
+<h1>Following users posts</h1>
 <table class="table">
     <thead>
       <tr>
         <th>Date</th>
+        <th>User</th>
         <th>Post</th>
-        <th></th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -17,9 +16,8 @@
     {% for post in posts %}
     <tr>
       <td>{{post.date}}</td>
+      <td>{{post.author_id}}</td>
       <td>{{post.content}}</td>
-      <td><a href="/edit_post/{{post.id}}"><button type="button" class="btn btn-primary">Edit</button></a></td>
-      <td><a href="/delete_post/{{post.id}}"><button type="button" class="btn btn-primary">Delete</button></a></td>
     </tr>
     {% endfor %}
   </tbody>
