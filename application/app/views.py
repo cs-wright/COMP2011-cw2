@@ -128,14 +128,10 @@ def unfollower(id):
 @app.route('/followers', methods=['GET', 'POST'])
 @login_required
 def followers():
-    user_id = current_user.id # id of the user whose followers you want to find
+    user_id = current_user.id
 
     UserAlias = aliased(User)
     followers = User.query.join(UserAlias.friends).with_entities(UserAlias).filter_by(id=current_user.id)
-
-
-    #followers = db.session.query(friendship).filter(friendship.friend_id == current_user.id).join(User, User.id == friendship.friend_id).all()
-    #temp=db.session.query(User).filter(User.id.in_(followers)).all()
     return render_template('followers.html', title="Followers", users=followers)
 
 @app.route('/rmfollower/<id>', methods=['GET'])
