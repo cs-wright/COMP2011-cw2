@@ -2,11 +2,14 @@ from flask import render_template, flash, redirect, url_for
 from app import app, db, models, admin
 from flask_login import current_user, login_user, logout_user, login_required
 from .forms import RegisterUser, LoginUser, WritePost
-from app.models import User, Post
+from app.models import User, Post, friendship
 from flask_admin.contrib.sqla import ModelView 
 
-admin.add_view(ModelView(Post, db.session))
+from sqlalchemy.orm import aliased
 
+
+admin.add_view(ModelView(Post, db.session))
+admin.add_view(ModelView(User, db.session))
 @app.route('/auth', methods=['GET', 'POST'])
 def authenticate():
     if current_user.is_authenticated:
@@ -68,6 +71,7 @@ def login():
 
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('authenticate'))
@@ -104,3 +108,44 @@ def delete_post(id):
     else:
         flash('You do not have permission to delete another users posts!')
     return redirect('/myposts')
+
+@app.route('/following', methods=['GET', 'POST'])
+@login_required
+def following():
+    following = current_user.friends
+    return render_template('following.html', title="All Users", users=following)
+
+
+@app.route('/unfollow/<id>', methods=['GET'])
+@login_required
+def unfollower(id):
+    following = User.query.get(id)
+    current_user.unfollow(following)
+    flash('Unfollowed!')
+    return redirect('/following')
+
+
+@app.route('/followers', methods=['GET', 'POST'])
+@login_required
+def followers():
+    user_id = current_user.id # id of the user whose followers you want to find
+
+    UserAlias = aliased(User)
+    followers = User.query.join(UserAlias.friends).with_entities(UserAlias).filter_by(id=current_user.id)
+
+
+    #followers = db.session.query(friendship).filter(friendship.friend_id == current_user.id).join(User, User.id == friendship.friend_id).all()
+    #temp=db.session.query(User).filter(User.id.in_(followers)).all()
+    return render_template('followers.html', title="Followers", users=followers)
+
+@app.route('/rmfollower/<id>', methods=['GET'])
+@login_required
+def remove_follower(id):
+
+    
+
+    follower = User.query.get(id)
+    flash('User: %s, has unfollowed you  (%s)'%(follower.name, current_user.name))
+    follower.unfollow(current_user)
+    #flash('Follower Removed!')
+    return redirect('/followers')

@@ -35,12 +35,13 @@ class User(UserMixin, db.Model):
     def follow(self, friend):
         if friend not in self.friends:
             self.friends.append(friend)
-            #friend.friends.append(self)
+            db.session.commit()
 
     def unfollow(self, friend):
         if friend in self.friends:
             self.friends.remove(friend)
-            #friend.friends.remove(self)
+            db.session.commit()
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
