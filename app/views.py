@@ -259,3 +259,7 @@ def findUsersToFollower():
             notFollowing.append(user)
         current=0
     return render_template('findusers.html', title="Find Users", users=notFollowing)
+
+@app.route('/cookies', methods=['GET', 'POST'])
+def cookies():
+    return render_template('cookies.html')
