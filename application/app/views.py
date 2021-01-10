@@ -17,8 +17,10 @@ def authenticate():
         return redirect(url_for('home'))
     register_form = RegisterUser()
     login_form = LoginUser()
+    home={'description':'Welcome to trial of our new social network designed to keep people connected and up to date! Please look either register or login by filling out the forms below. We hope your improved social experience!'}
     return render_template('auth.html', 
-                            title='Authentication', 
+                            title='Authentication',
+                            home=home, 
                             register_form=register_form, 
                             login_form=login_form)
 
@@ -148,7 +150,14 @@ def home():
 @login_required
 def followingposts():
     posts = Post.query.join(friendship, (friendship.c.friend_id == Post.author_id)).filter(friendship.c.user_id == current_user.id).order_by(Post.date.desc())
-    return render_template('followingposts.html', title="Following users Posts", posts=posts)
+    followingposts = []
+    for entry in posts:
+        temp = User.query.get(entry.author_id)
+        #followingposts.append(entry & temp.name)
+        dictionary = {'date':entry.date, 'content':entry.content, 'name':temp.name}
+        followingposts.append(dictionary)
+
+    return render_template('followingposts.html', title="Following users Posts", posts=followingposts)
 
 @app.route('/myposts', methods=['GET', 'POST'])
 @login_required

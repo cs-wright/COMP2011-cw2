@@ -7,3 +7,18 @@
     display: none;
     text-indent: -9999px;
 }
+
+.col-lg-6{
+    max-width: 500px;
+    min-height: 800px;
+    margin: auto;
+}
+
+.col-lg-8{
+    min-height: 800px;
+    margin: auto;
+}
+
+textarea.form-control{
+    min-height: 350px;
+}

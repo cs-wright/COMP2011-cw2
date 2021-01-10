@@ -7,10 +7,9 @@
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-      <link rel="stylesheet" href="/static/taskLayout.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-      <!-- <link rel="stylesheet" href="/static/styles.css"> -->
+      <link rel="stylesheet" href="/static/style.css">
       {% if title %}
       <title>{{ title }}</title>
       {% else %}
@@ -19,19 +18,19 @@
    </head>
    <body>
       <div class="container-fluid">
-         <div class="row">
-            <div class="col-4"></div>
-            <div class="col-5">
-               {% with messages = get_flashed_messages() %}
-               {% if messages %}
-               {% for message in messages %}
-               <div class="alert alert-success">
-                  {{ message }}
-               </div>
-               {% endfor %}
-               {% endif %}
-               {% endwith %}
-               <div class="col-sm-6">
+         {% with messages = get_flashed_messages() %}
+         {% if messages %}
+         {% for message in messages %}
+         <div class="alert alert-success">
+            <p>{{ message }}</p>
+         </div>
+         {% endfor %}
+         {% endif %}
+         {% endwith %}
+         <h1>Authenticate</h1>
+         <p>{{ home.description }}</p>
+         <div class="row align-items-center">
+               <div class="col-lg-6">
                <h1>Register</h1>
                <form action="/register" method="post" name="register">
                   {{ register_form.hidden_tag() }}
@@ -65,7 +64,7 @@
                   <button type="submit" class="btn btn-primary" value="register">Sign Up!</button>         
                </form>
                </div>
-               <div class="col-sm-6">
+               <div class="col-lg-6">
                <h1>Login</h1>
                <form action="/login" method="post" name="login">
                   {{ login_form.hidden_tag() }}
@@ -82,7 +81,6 @@
                   <button type="submit" class="btn btn-primary" value="login">Sign In!</button>         
                </form>
               </div>
-            </div>
          </div>
       </div>
       <!-- Optional JavaScript -->

@@ -26,8 +26,10 @@
            <p><b>gender</b></p>
            {{ form.gender(class_='form-control') }}
        </div>
+       <div class="panel-body">
+           <button type="submit" class="btn btn-primary" value="register">Update!</button>         
+       </div>
    </div>
-   <button type="submit" class="btn btn-primary" value="register">Update!</button>         
 </form>
 
 <form method="post" name="pass">
@@ -45,8 +47,10 @@
             <p><b>Confirm Password</b></p>
             {{ passwordForm.confirm_password(class_='form-control') }}
         </div>
+        <div class="panel-body">
+            <button type="submit" class="btn btn-primary" value="pass">Change Password!</button>         
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary" value="pass">Change Password!</button>         
  </form>
 
 

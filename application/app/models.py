@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -18,7 +18,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(120))
     username = db.Column(db.String(64), index=True, unique=True)
     password = db.Column(db.String(128))
-    dob = db.Column(db.DateTime)
+    dob = db.Column(db.Date)
     gender = db.Column(db.String(20))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     friends = db.relationship('User',
@@ -47,5 +47,5 @@ class User(UserMixin, db.Model):
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(500))
-    date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    date = db.Column(db.Date, index=True, default=date.today())
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
