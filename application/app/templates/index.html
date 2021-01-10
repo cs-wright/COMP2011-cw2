@@ -2,7 +2,9 @@
 {% block content %}
 
 <h1>Hi, {{ current_user.username }}!</h1>
-{{home.description}}
+
+<p>{{home.description}}</p>
+
 
 <form method="post" name="status">
     {{ form.hidden_tag() }}
