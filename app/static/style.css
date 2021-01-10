@@ -9,7 +9,7 @@
 }
 
 .col-lg-6{
-    max-width: 500px;
+    min-width: 500px;
     min-height: 800px;
     margin: auto;
 }
