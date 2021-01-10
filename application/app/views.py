@@ -4,13 +4,13 @@ from flask_login import current_user, login_user, logout_user, login_required
 from .forms import RegisterUser, LoginUser, WritePost, UpdatePassword
 from app.models import User, Post, friendship
 from flask_admin.contrib.sqla import ModelView 
-from datetime import datetime
+#from datetime import datetime
 
 from sqlalchemy.orm import aliased
 
 
-admin.add_view(ModelView(Post, db.session))
-admin.add_view(ModelView(User, db.session))
+#admin.add_view(ModelView(Post, db.session))
+#admin.add_view(ModelView(User, db.session))
 @app.route('/auth', methods=['GET', 'POST'])
 def authenticate():
     if current_user.is_authenticated:
