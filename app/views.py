@@ -45,8 +45,11 @@ def register():
             db.session.add(account)
             db.session.commit()
             flash('registered successfully')
+    
+    home={'description':'Welcome to trial of our new social network designed to keep people connected and up to date! Please look either register or login by filling out the forms below. We hope your improved social experience!'}
     return render_template('auth.html', 
                             title='Authentication', 
+                            home=home, 
                             register_form=register_form, 
                             login_form=login_form)
 
@@ -66,8 +69,10 @@ def login():
         else:
             login_user(user)
             return redirect(url_for('home'))
+    home={'description':'Welcome to trial of our new social network designed to keep people connected and up to date! Please look either register or login by filling out the forms below. We hope your improved social experience!'}
     return render_template('auth.html', 
                             title='Authentication', 
+                            home=home, 
                             register_form=register_form, 
                             login_form=login_form)
 
