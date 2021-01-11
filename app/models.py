@@ -2,6 +2,8 @@ from datetime import date
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from sqlalchemy.orm import aliased
+
 
 
 @login.user_loader
@@ -42,6 +44,35 @@ class User(UserMixin, db.Model):
         if friend in self.friends:
             self.friends.remove(friend)
             db.session.commit()
+    
+    def following_posts(self):
+        posts = Post.query.join(friendship, (friendship.c.friend_id == Post.author_id)).filter(friendship.c.user_id == self.id).order_by(Post.date.desc())
+        followingposts = []
+        for entry in posts:
+            temp = User.query.get(entry.author_id)
+            dictionary = {'date':entry.date, 'content':entry.content, 'name':temp.name}
+            followingposts.append(dictionary)
+        return followingposts
+    
+    def following_user(self):
+        user_id = self.id
+        UserAlias = aliased(User)
+        followers = User.query.join(UserAlias.friends).with_entities(UserAlias).filter_by(id=self.id)
+        return followers
+    
+    def not_following(self):
+        following = self.friends
+        notFollowing = []
+        current=0
+        for user in User.query.all():
+            for friends in self.friends:
+                if user.id == friends.id:
+                    current=1
+            if current==0:
+                notFollowing.append(user)
+            current=0
+        return notFollowing
+
 
 
 class Post(db.Model):
