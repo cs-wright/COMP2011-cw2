@@ -154,14 +154,14 @@ def home():
 @app.route('/followingposts', methods=['GET', 'POST'])
 @login_required
 def followingposts():
-    posts = Post.query.join(friendship, (friendship.c.friend_id == Post.author_id)).filter(friendship.c.user_id == current_user.id).order_by(Post.date.desc())
-    followingposts = []
-    for entry in posts:
-        temp = User.query.get(entry.author_id)
-        #followingposts.append(entry & temp.name)
-        dictionary = {'date':entry.date, 'content':entry.content, 'name':temp.name}
-        followingposts.append(dictionary)
-
+    # posts = Post.query.join(friendship, (friendship.c.friend_id == Post.author_id)).filter(friendship.c.user_id == current_user.id).order_by(Post.date.desc())
+    # followingposts = []
+    # for entry in posts:
+    #     temp = User.query.get(entry.author_id)
+    #     #followingposts.append(entry & temp.name)
+    #     dictionary = {'date':entry.date, 'content':entry.content, 'name':temp.name}
+    #     followingposts.append(dictionary)
+    followingposts=current_user.following_posts()
     return render_template('followingposts.html', title="Following users Posts", posts=followingposts)
 
 @app.route('/myposts', methods=['GET', 'POST'])
@@ -220,10 +220,11 @@ def unfollow(id):
 @app.route('/followers', methods=['GET', 'POST'])
 @login_required
 def followers():
-    user_id = current_user.id
+    # user_id = current_user.id
 
-    UserAlias = aliased(User)
-    followers = User.query.join(UserAlias.friends).with_entities(UserAlias).filter_by(id=current_user.id)
+    # UserAlias = aliased(User)
+    # followers = User.query.join(UserAlias.friends).with_entities(UserAlias).filter_by(id=current_user.id)
+    followers=current_user.following_user()
     return render_template('followers.html', title="Followers", users=followers)
 
 @app.route('/rmfollower/<id>', methods=['GET'])
@@ -248,16 +249,17 @@ def follow(id):
 @app.route('/findfollowers', methods=['GET', 'POST'])
 @login_required
 def findUsersToFollower():
-    following = current_user.friends
-    notFollowing = []
-    current=0
-    for user in User.query.all():
-        for friends in current_user.friends:
-            if user.id == friends.id:
-                current=1
-        if current==0:
-            notFollowing.append(user)
-        current=0
+    # following = current_user.friends
+    # notFollowing = []
+    # current=0
+    # for user in User.query.all():
+    #     for friends in current_user.friends:
+    #         if user.id == friends.id:
+    #             current=1
+    #     if current==0:
+    #         notFollowing.append(user)
+    #     current=0
+    notFollowing=current_user.not_following()
     return render_template('findusers.html', title="Find Users", users=notFollowing)
 
 @app.route('/cookies', methods=['GET', 'POST'])
