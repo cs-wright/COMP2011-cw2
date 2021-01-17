@@ -9,11 +9,11 @@ class RegisterUser(Form):
     password = PasswordField('password', validators=[DataRequired()])
     correctFormat ='%d/%m/%Y'
     dob = DateField('dob', format=correctFormat, validators=[DataRequired()])
-    gender = SelectField('gender', choices=['Male', 'Female', 'Other', 'Prefer not to say'], validators=[DataRequired()])
+    gender = SelectField('gender', choices=['Male', 'Female', 'Other', 'Prefer not to say'])
 
 class LoginUser(Form):
-    username = TextField('username', validators=[DataRequired()])
-    password = PasswordField('password', validators=[DataRequired()])
+    username = TextField('username',id='login_username', validators=[DataRequired()])
+    password = PasswordField('password',id='login_password', validators=[DataRequired()])
 
 class WritePost(Form):
     txt = TextAreaField('txt', validators=[DataRequired()])

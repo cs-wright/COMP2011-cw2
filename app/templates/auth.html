@@ -67,7 +67,7 @@
                <div class="col-lg-6">
                <h1>Login</h1>
                <form action="/login" method="post" name="login">
-                  {{ login_form.hidden_tag() }}
+                  {{ login_form.csrf_token(id = "login") }}
                   <div class="panel panel-default">
                      <div class="panel-body">
                         <p>Username</p>
@@ -75,7 +75,7 @@
                      </div>
                      <div class="panel-body">
                         <p>Password</p>
-                        {{ register_form.password(class_='form-control') }}
+                        {{ login_form.password(class_='form-control') }}
                      </div>
                   </div>
                   <button type="submit" class="btn btn-primary" value="login">Sign In!</button>         
