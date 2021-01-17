@@ -33,7 +33,7 @@
 </form>
 
 <form method="post" name="pass">
-    {{ passwordForm.hidden_tag() }}
+    {{ passwordForm.csrf_token(id = "pswdForm") }}
     <div class="panel panel-default">
         <div class="panel-body">
             <p><b>Current Password</b></p>
